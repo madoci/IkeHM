@@ -9,9 +9,9 @@ public class RunStatistics {
 
     protected int nbSamples = 0;
 
-    private float totalDistanceRan = 0; // m
-    private float totalTimeRan = 0; // s
-    private float squareSpeedSum = 0; // for standard deviation
+    private double totalDistanceRan = 0; // m
+    private double totalTimeRan = 0; // s
+    private double squareSpeedSum = 0; // for standard deviation
 
     public RunStatistics() {
     }
@@ -20,29 +20,29 @@ public class RunStatistics {
         totalDistanceRan = 0;
         totalTimeRan = 0;
         nbSamples = 0;
-        speedConsistency = 0;
+        squareSpeedSum = 0;
     }
 
     public void update(float distanceRan, float timeRan) {
         totalDistanceRan += distanceRan;
         totalTimeRan += timeRan;
         nbSamples += 1;
-        speedConsistency += distanceRan / timeRan;
+        squareSpeedSum += distanceRan / timeRan;
     }
 
-    public float getTotalDistanceRan() {
+    public double getTotalDistanceRan() {
         return totalDistanceRan;
     }
 
-    public float getTotalTimeRan() {
+    public double getTotalTimeRan() {
         return totalTimeRan;
     }
 
-    public float getAverageSpeed() {
+    public double getAverageSpeed() {
         return totalDistanceRan / totalTimeRan * 3.6; // km/h
     }
 
-    public float getSpeedConsistency() {
+    public double getSpeedConsistency() {
         return Math.sqrt(squareSpeedSum / nbSamples - getAverageSpeed());
     }
 }

@@ -9,16 +9,29 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.hardware.TriggerEventListener;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Timer;
+
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
+    private boolean running = false;
+    private float startSteps = -1;
+    private float currentSteps = 0;
+
+    // Step sensor
     private SensorManager sensorManager;
     private Sensor stepsSensor;
     private TriggerEventListener triggerEventListener;
+    private long startTime = 0;
 
+    // UI elements
     private TextView stepTextView = null;
+    private Button runButton = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +39,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
 
         stepTextView = (TextView) findViewById(R.id.textView8);
+        runButton = (Button) findViewById(R.id.runButton);
+
+        runButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if(running){
+                    running = false;
+                    startTime = System.currentTimeMillis();
+                    runButton.setText("Start run");
+                } else {
+                    running = true;
+                    startSteps = -1;
+                    currentSteps = 0;
+                    runButton.setText("Stop run");
+                }
+            }
+        });
 
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         stepsSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -39,7 +68,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        stepTextView.setText("" + event.values[0]);
+        if(running){
+            if(startSteps == -1){
+                startSteps = event.values[0];
+            }
+            currentSteps = event.values[0];
+            stepTextView.setText("" + (currentSteps - startSteps));
+        }
     }
 
     @Override

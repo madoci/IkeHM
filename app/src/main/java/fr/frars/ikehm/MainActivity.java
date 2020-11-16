@@ -44,18 +44,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         stepTextView = (TextView) findViewById(R.id.textView8);
         runButton = (Button) findViewById(R.id.runButton);
 
-        runButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if(running){
-                    running = false;
-                    startTime = System.currentTimeMillis();
-                    runButton.setText(R.string.start_run);
-                } else {
-                    running = true;
-                    startSteps = -1;
-                    currentSteps = 0;
-                    runButton.setText(R.string.stop_run);
-                }
+        runButton.setOnClickListener(v -> {
+            if(running){
+                running = false;
+                startTime = System.currentTimeMillis();
+                runButton.setText(R.string.start_run);
+            } else {
+                running = true;
+                startSteps = -1;
+                currentSteps = 0;
+                runButton.setText(R.string.stop_run);
             }
         });
 

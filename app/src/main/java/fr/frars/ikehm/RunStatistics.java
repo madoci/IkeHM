@@ -23,7 +23,7 @@ public class RunStatistics {
         squareSpeedSum = 0;
     }
 
-    public void update(float distanceRan, float timeRan) {
+    public void update(double distanceRan, double timeRan) {
         totalDistanceRan += distanceRan;
         totalTimeRan += timeRan;
         nbSamples += 1;

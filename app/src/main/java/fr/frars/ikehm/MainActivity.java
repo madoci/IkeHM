@@ -1,5 +1,6 @@
 package fr.frars.ikehm;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.hardware.TriggerEventListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView stepTextView = null;
     private Button runButton = null;
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,12 +49,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 if(running){
                     running = false;
                     startTime = System.currentTimeMillis();
-                    runButton.setText("Start run");
+                    runButton.setText(R.string.start_run);
                 } else {
                     running = true;
                     startSteps = -1;
                     currentSteps = 0;
-                    runButton.setText("Stop run");
+                    runButton.setText(R.string.stop_run);
                 }
             }
         });
@@ -73,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 startSteps = event.values[0];
             }
             currentSteps = event.values[0];
-            stepTextView.setText("" + (currentSteps - startSteps));
+
+            stepTextView.setText(String.valueOf(currentSteps - startSteps));
         }
     }
 

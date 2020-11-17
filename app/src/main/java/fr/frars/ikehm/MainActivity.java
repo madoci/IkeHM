@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         initSensors();
         initViews();
+        updateViews();
 
         runButton.setOnClickListener(v -> {
             if (runSession.isStarted()) {
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             } else {
                 runSession.start();
                 runButton.setText(R.string.stop_run);
+                updateViews();
             }
         });
     }
@@ -54,9 +56,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER && runSession.isStarted()) {
             int stepCount = (int) event.values[0];
             runSession.update(stepCount);
-
-            distanceTextView.setText(getString(R.string.run_distance, runSession.getTotalDistanceRan()));
-            speedTextView.setText(getString(R.string.run_speed, runSession.getAverageSpeed()));
+            updateViews();
         }
     }
 
@@ -79,8 +79,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void initViews() {
-        runButton = (Button) findViewById(R.id.runButton);
-        distanceTextView = (TextView) findViewById(R.id.textView8);
-        speedTextView = (TextView) findViewById(R.id.textView9);
+        runButton = findViewById(R.id.runButton);
+        distanceTextView = findViewById(R.id.textView8);
+        speedTextView = findViewById(R.id.textView9);
+    }
+
+    private void updateViews() {
+        double distance = runSession.getTotalDistanceRan();
+        String distanceUnit = "m";
+        if (distance >= 1000) {
+            distance /= 1000;
+            distanceUnit = "km";
+        }
+        distanceTextView.setText(getString(R.string.run_distance, distance, distanceUnit));
+        speedTextView.setText(getString(R.string.run_speed, runSession.getAverageSpeed()));
     }
 }

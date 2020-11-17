@@ -39,7 +39,7 @@ public class RunStatistics {
     }
 
     public double getAverageSpeed() {
-        return totalDistanceRan / totalTimeRan * 3.6; // km/h
+        return totalTimeRan > 0 ? totalDistanceRan / totalTimeRan * 3.6 : 0.; // km/h
     }
 
     public double getSpeedConsistency() {

@@ -23,7 +23,7 @@ public class RunStatistics {
         squareSpeedSum = 0;
     }
 
-    public void update(float distanceRan, float timeRan) {
+    public void update(double distanceRan, double timeRan) {
         totalDistanceRan += distanceRan;
         totalTimeRan += timeRan;
         nbSamples += 1;
@@ -39,7 +39,7 @@ public class RunStatistics {
     }
 
     public double getAverageSpeed() {
-        return totalDistanceRan / totalTimeRan * 3.6; // km/h
+        return totalTimeRan > 0 ? totalDistanceRan / totalTimeRan * 3.6 : 0.; // km/h
     }
 
     public double getSpeedConsistency() {

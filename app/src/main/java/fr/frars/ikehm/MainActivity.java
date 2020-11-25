@@ -12,6 +12,7 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Button runButton;
     private TextView distanceTextView;
     private TextView speedTextView;
+    private ProgressBar progressBar;
+    private TextView progressText;
+    private TextView levelText;
+
+    private User user;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -33,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        user = new User();
         runSession = new RunSession();
 
         initSensors();
@@ -55,8 +62,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER && runSession.isStarted()) {
             int stepCount = (int) event.values[0];
+            double currentKm = runSession.getTotalDistanceRan();
             runSession.update(stepCount);
-            updateViews();
+            user.avatar.addExperience((int)Math.round((runSession.getTotalDistanceRan()-currentKm)));
+            updateViews();x
         }
     }
 
@@ -82,6 +91,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         runButton = findViewById(R.id.runButton);
         distanceTextView = findViewById(R.id.textView8);
         speedTextView = findViewById(R.id.textView9);
+        progressBar = findViewById(R.id.progressBar);
+        progressText = findViewById(R.id.progressText);
+        levelText = findViewById(R.id.LevelText);
     }
 
     private void updateViews() {
@@ -93,5 +105,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         distanceTextView.setText(getString(R.string.run_distance, distance, distanceUnit));
         speedTextView.setText(getString(R.string.run_speed, runSession.getAverageSpeed()));
+        progressBar.setProgress(user.avatar.getExperience());
+        progressText.setText(getString(R.string.exp_progress, user.avatar.getExperience(), user.avatar.getThresholdExperience()));
+        levelText.setText(getString(R.string.level,user.avatar.getLevel()));
+
     }
 }

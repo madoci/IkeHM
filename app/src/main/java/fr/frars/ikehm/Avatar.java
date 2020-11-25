@@ -4,7 +4,7 @@ public class Avatar {
 
     private int level = 1;
     private int experience = 0;
-    private static final int thresholdExperience = 200;
+    private static final int thresholdExperience = 100;
 
     public Avatar() {
     }
@@ -18,4 +18,6 @@ public class Avatar {
     public int getLevel() { return this.level; }
 
     public int getExperience() { return this.experience; }
+
+    public int getThresholdExperience(){ return this.thresholdExperience; }
 }

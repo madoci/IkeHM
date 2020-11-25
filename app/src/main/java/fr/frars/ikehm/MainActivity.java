@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Button runButton;
     private TextView distanceTextView;
     private TextView speedTextView;
+    private TextView levelTextView;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         runButton = findViewById(R.id.runButton);
         distanceTextView = findViewById(R.id.textView8);
         speedTextView = findViewById(R.id.textView9);
+        levelTextView = findViewById(R.id.LevelText);
     }
 
     private void updateViews() {
@@ -117,5 +119,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         distanceTextView.setText(getString(R.string.run_distance, distance, distanceUnit));
         speedTextView.setText(getString(R.string.run_speed, runSession.getAverageSpeed()));
+        levelTextView.setText(getString(R.string.level, avatar.getLevel()));
     }
 }

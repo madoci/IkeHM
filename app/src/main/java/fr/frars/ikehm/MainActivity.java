@@ -11,6 +11,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,9 +20,14 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     private RunSession runSession;
+    private Avatar avatar;
 
     // Sensors
     Sensor stepCounter;
+    private int lastStepCount = -1;
+
+    //
+    Vibrator vibrator;
 
     // UI elements
     private Button runButton;
@@ -34,10 +41,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(R.layout.activity_main);
 
         runSession = new RunSession();
+        avatar = new Avatar();
 
         initSensors();
         initViews();
         updateViews();
+
+        vibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         runButton.setOnClickListener(v -> {
             if (runSession.isStarted()) {
@@ -55,7 +65,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER && runSession.isStarted()) {
             int stepCount = (int) event.values[0];
-            runSession.update(stepCount);
+            if (lastStepCount == -1) {
+                lastStepCount = stepCount;
+            }
+            int deltaStepCount = stepCount - lastStepCount;
+            lastStepCount = stepCount;
+
+            runSession.update(deltaStepCount);
+            if (avatar.addExperience(deltaStepCount)) {
+                if (Build.VERSION.SDK_INT >= 26) {
+                    vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+                } else {
+                    vibrator.vibrate(200);
+                }
+            }
+
             updateViews();
         }
     }

@@ -26,8 +26,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     Sensor stepCounter;
     private int lastStepCount = -1;
 
-    //
+    // Vibrator
     Vibrator vibrator;
+    long[] vibratePattern = new long[]{0, 400, 200};
 
     // UI elements
     private Button runButton;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             runSession.update(deltaStepCount);
             if (avatar.addExperience(deltaStepCount)) {
                 if (Build.VERSION.SDK_INT >= 26) {
-                    vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+                    vibrator.vibrate(VibrationEffect.createWaveform(vibratePattern, VibrationEffect.DEFAULT_AMPLITUDE));
                 } else {
                     vibrator.vibrate(200);
                 }

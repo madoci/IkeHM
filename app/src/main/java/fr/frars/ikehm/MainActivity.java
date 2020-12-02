@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             runSession.update(deltaStepCount);
             if (user.avatar.addExperience(deltaStepCount)) {
                 if (Build.VERSION.SDK_INT >= 26) {
-                    vibrator.vibrate(VibrationEffect.createWaveform(vibratePattern, VibrationEffect.DEFAULT_AMPLITUDE));
+                    vibrator.vibrate(VibrationEffect.createWaveform(vibratePattern, -1));
                 } else {
                     vibrator.vibrate(200);
                 }

@@ -5,4 +5,5 @@
     <string name="run_distance">Total distance: %.2f %s</string>
     <string name="run_speed">Average speed: %.2f km/h</string>
     <string name="level">Level %d</string>
+    <string name="exp_progress">%d/%d</string>
 </resources>

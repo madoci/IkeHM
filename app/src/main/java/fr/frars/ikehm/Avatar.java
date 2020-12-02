@@ -31,4 +31,6 @@ public class Avatar {
     private void updateThreshold() {
         threshold = level * difficulty;
     }
+
+    public int getThresholdExperience(){ return this.threshold; }
 }

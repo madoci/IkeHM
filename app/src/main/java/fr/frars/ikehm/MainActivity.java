@@ -14,13 +14,14 @@ import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
     private RunSession runSession;
-    private Avatar avatar;
+    private User user;
 
     // Sensors
     Sensor stepCounter;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private TextView distanceTextView;
     private TextView speedTextView;
     private TextView levelTextView;
+    private ProgressBar progressBar;
+    private TextView progressTextView;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -42,8 +45,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        user = new User();
         runSession = new RunSession();
-        avatar = new Avatar();
 
         initSensors();
         initViews();
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         runButton.setOnClickListener(v -> {
             if (runSession.isStarted()) {
                 runSession.stop();
+                user.globalStatistics.update(runSession.getTotalDistanceRan(), runSession.getTotalTimeRan());
                 runButton.setText(R.string.start_run);
             } else {
                 runSession.start();
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             lastStepCount = stepCount;
 
             runSession.update(deltaStepCount);
-            if (avatar.addExperience(deltaStepCount)) {
+            if (user.avatar.addExperience(deltaStepCount)) {
                 if (Build.VERSION.SDK_INT >= 26) {
                     vibrator.vibrate(VibrationEffect.createWaveform(vibratePattern, VibrationEffect.DEFAULT_AMPLITUDE));
                 } else {
@@ -109,6 +113,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         distanceTextView = findViewById(R.id.textView8);
         speedTextView = findViewById(R.id.textView9);
         levelTextView = findViewById(R.id.LevelText);
+        progressBar = findViewById(R.id.progressBar);
+        progressTextView = findViewById(R.id.progressText);
     }
 
     private void updateViews() {
@@ -120,6 +126,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
         distanceTextView.setText(getString(R.string.run_distance, distance, distanceUnit));
         speedTextView.setText(getString(R.string.run_speed, runSession.getAverageSpeed()));
-        levelTextView.setText(getString(R.string.level, avatar.getLevel()));
+        levelTextView.setText(getString(R.string.level, user.avatar.getLevel()));
+        progressBar.setMax(user.avatar.getThresholdExperience());
+        progressBar.setProgress(user.avatar.getExperience());
+        progressTextView.setText(getString(R.string.exp_progress, user.avatar.getExperience(), user.avatar.getThresholdExperience()));
     }
 }

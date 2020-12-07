@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             @Override
             public void onInit(int status) {
                 if(status != TextToSpeech.ERROR) {
-                    textToSpeech.setLanguage(Locale.UK);
+                    textToSpeech.setLanguage(Locale.FRANCE);
                 }
             }
         });
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);final Intent speechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH);
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.FRANCE);
 
         runButton.setOnClickListener(v -> {
             if (runSession.isStarted()) {
@@ -142,14 +142,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     runSession.stop();
                     user.globalStatistics.update(runSession.getTotalDistanceRan(), runSession.getTotalTimeRan());
                     runButton.setText(R.string.start_run);
-                    String toSpeak = "stopped";
+                    String toSpeak = "course terminée";
                     Toast.makeText(getApplicationContext(), toSpeak,Toast.LENGTH_SHORT).show();
                     textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
-                } else if(!runSession.isStarted() && data.get(0).contains("start")) {
+                } else if(!runSession.isStarted() && data.get(0).contains("go")) {
                     runSession.start();
                     runButton.setText(R.string.stop_run);
                     updateViews();
-                    String toSpeak = "started";
+                    String toSpeak = "course commencée";
                     Toast.makeText(getApplicationContext(), toSpeak,Toast.LENGTH_SHORT).show();
                     textToSpeech.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
                 }

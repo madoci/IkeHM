@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">IkeHM</string>
-    <string name="start_run">Start run</string>
-    <string name="stop_run">Stop run</string>
-    <string name="run_distance">Total distance: %.2f %s</string>
-    <string name="run_speed">Average speed: %.2f km/h</string>
-    <string name="level">Level %d</string>
-    <string name="exp_progress">%d/%d</string>
+    <string name="app_name">Joggame</string>
+    <string name="start_run">Commencer la course</string>
+    <string name="stop_run">Arrêter la course</string>
+    <string name="run_distance">Distance totale : %1$.2f %2$s</string>
+    <string name="run_speed">Vitesse moyenne : %.2f km/h</string>
+    <string name="level">Niveau %d</string>
+    <string name="exp_progress">%1$d/%2$d</string>
+    <string name="voice" >Dire \"go\" pour commencer une course \n et \"stop\" pour l\'arrêter</string>
 </resources>
